@@ -3,12 +3,12 @@ using WebAPI.Entity;
 
 namespace WebAPI.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class, IEntity
+    public class NpgsqlRepository<T> : IRepository<T> where T : class, IEntity
     {
-        private readonly HotelDbContext _context;
+        private readonly NpgsqlHotelDbContext _context;
         private readonly DbSet<T> _entities;
 
-        public Repository(HotelDbContext context)
+        public NpgsqlRepository(NpgsqlHotelDbContext context)
         {
             _context = context;
             _entities = context.Set<T>();
@@ -47,5 +47,4 @@ namespace WebAPI.Repositories
             return entityList;
         }
     }
-
 }

@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebAPI.Entity;
 
-public class HotelDbContext : DbContext
+public class NpgsqlHotelDbContext : DbContext
 {
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Room> Rooms { get; set; }
-    public HotelDbContext(DbContextOptions<HotelDbContext> options) : base(options)
+    public NpgsqlHotelDbContext() : base()
     {
     }
-    protected override void OnModelCreating(ModelBuilder modelBuilder) 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
         => modelBuilder.Entity<Room>().HasData(
                 new() { Id = 1 },
                 new() { Id = 2 },

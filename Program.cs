@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using WebAPI.DB;
 using WebAPI.Repositories;
 
@@ -11,21 +10,41 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlServerRepository<>));
+}
+else
+{
+    builder.Services.AddScoped(typeof(IRepository<>), typeof(NpgsqlRepository<>));
+}
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<SqlHotelDbContext>(options =>
+   options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
+}
+else
+{
+    builder.Services.AddDbContext<NpgsqlHotelDbContext>(options =>
+        options.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration)));
 
-builder.Services.AddDbContext<HotelDbContext>(optionsBuilder => UseServer(optionsBuilder));
+}
 
 
 var app = builder.Build();
-var scope = app.Services.CreateScope();
-await DataHelper.ManageDataAsync(scope.ServiceProvider);
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    var scope = app.Services.CreateScope();
+    await DataHelper.ManageDataAsync(scope.ServiceProvider);
 }
 
 app.UseHttpsRedirection();
@@ -35,18 +54,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-
-void UseServer(DbContextOptionsBuilder optionsBuilder)
-{
-    if (builder.Environment.IsDevelopment())
-    {
-        Console.WriteLine("IsDevelopment");
-        optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection"));
-    }
-    else
-    {
-        Console.WriteLine("IsNotDevelopment");
-        optionsBuilder.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration));
-    }
-}
