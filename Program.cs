@@ -41,10 +41,12 @@ void UseServer(DbContextOptionsBuilder optionsBuilder)
 {
     if (builder.Environment.IsDevelopment())
     {
+        Console.WriteLine("IsDevelopment");
         optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection"));
     }
     else
     {
-        optionsBuilder.UseSqlServer(ConnectionHelper.GetConnectionString(builder.Configuration));
+        Console.WriteLine("IsNotDevelopment");
+        optionsBuilder.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration));
     }
 }
