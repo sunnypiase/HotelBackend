@@ -16,7 +16,6 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 builder.Services.AddDbContext<HotelDbContext>(optionsBuilder => UseServer(optionsBuilder));
 
-//Migration: This is the programmatic equivalent to Update-Database
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
