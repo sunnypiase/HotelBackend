@@ -31,17 +31,14 @@ namespace WebAPI.Repositories
 
         public async Task<IEnumerable<T>> BatchAddAsync(IEnumerable<T> entityList)
         {
+            List<T> result = new List<T>();
             foreach (var entity in entityList)
             {
-                if (entity is Booking booking)
-                {
-                    booking.Date = booking.Date.ToUniversalTime();
-                }
+                await _entities.AddAsync(entity);
+                result.Add(entity);
             }
 
-            await _entities.AddRangeAsync(entityList);
-            await _context.SaveChangesAsync();
-            return entityList;
+            return result;
         }
 
 

@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
             return Ok(bookings);
         }
         [HttpPost("BatchCreate")]
-        public async Task<IActionResult> BatchCreate([FromBody] BatchBookingDto batchBooking)
+        public async Task<ActionResult<List<Booking>>> BatchCreate([FromBody] BatchBookingDto batchBooking)
         {
             var startDate = batchBooking.StartDate;
             var endDate = batchBooking.EndDate;
