@@ -27,19 +27,21 @@ namespace WebAPI.Repositories
 
             await _entities.AddAsync(entity);
             await _context.SaveChangesAsync();
-            Console.WriteLine("jsutAdd");
         }
 
         public async Task<IEnumerable<T>> BatchAddAsync(IEnumerable<T> entityList)
         {
-            List<T> result = new List<T>();
             foreach (var entity in entityList)
             {
-                await _entities.AddAsync(entity);
-                result.Add(entity);
+                if (entity is Booking booking)
+                {
+                    booking.Date = booking.Date.ToUniversalTime();
+                }
             }
-            Console.WriteLine("batch");
-            return result;
+
+            await _entities.AddRangeAsync(entityList);
+            await _context.SaveChangesAsync();
+            return entityList;
         }
 
 
