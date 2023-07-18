@@ -13,6 +13,13 @@ public class NpgsqlHotelDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Booking>()
+            .Property(e => e.Date)
+            .HasColumnType("timestamp with time zone");
+
+        // Add this line to set the time zone for PostgreSQL session to UTC.
+        modelBuilder.HasAnnotation("Npgsql:PostgresVersion", "SET timezone = 'UTC';");
+
         modelBuilder.Entity<Room>().HasData(
             new() { Id = 1 },
             new() { Id = 2 },
