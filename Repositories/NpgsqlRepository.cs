@@ -27,6 +27,7 @@ namespace WebAPI.Repositories
 
             await _entities.AddAsync(entity);
             await _context.SaveChangesAsync();
+            Console.WriteLine("jsutAdd");
         }
 
         public async Task<IEnumerable<T>> BatchAddAsync(IEnumerable<T> entityList)
@@ -37,7 +38,7 @@ namespace WebAPI.Repositories
                 await _entities.AddAsync(entity);
                 result.Add(entity);
             }
-
+            Console.WriteLine("batch");
             return result;
         }
 
