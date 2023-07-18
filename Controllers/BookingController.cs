@@ -68,7 +68,7 @@ namespace WebAPI.Controllers
             var bookings = Enumerable.Range(0, totalDays)
                                      .Select(offset => new Booking
                                      {
-                                         Date = startDate.AddDays(offset),
+                                         Date = startDate.AddDays(offset).ToUniversalTime(),
                                          UserId = batchBooking.UserId,
                                          RoomId = batchBooking.RoomId
                                      })
