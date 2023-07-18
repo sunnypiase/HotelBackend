@@ -20,9 +20,30 @@ namespace WebAPI.Repositories
 
         public async Task AddAsync(T entity)
         {
+            if (entity is Booking booking)
+            {
+                booking.Date = booking.Date.ToUniversalTime();
+            }
+
             await _entities.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<T>> BatchAddAsync(IEnumerable<T> entityList)
+        {
+            foreach (var entity in entityList)
+            {
+                if (entity is Booking booking)
+                {
+                    booking.Date = booking.Date.ToUniversalTime();
+                }
+            }
+
+            await _entities.AddRangeAsync(entityList);
+            await _context.SaveChangesAsync();
+            return entityList;
+        }
+
 
         public void Update(T entity)
         {
@@ -38,13 +59,6 @@ namespace WebAPI.Repositories
         public IQueryable<T> Query()
         {
             return _context.Set<T>().AsNoTracking();
-        }
-
-        public async Task<IEnumerable<T>> BatchAddAsync(IEnumerable<T> entityList)
-        {
-            await _entities.AddRangeAsync(entityList);
-            await _context.SaveChangesAsync();
-            return entityList;
         }
     }
 }
