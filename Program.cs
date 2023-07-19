@@ -13,12 +13,14 @@ builder.Services.AddCors(options =>
         {
             builder.WithOrigins(
                    "http://localhost:3000",
-                   "https://64b776f28321af4be0486692--pegas.netlify.app/")
+                   "https://64b776f28321af4be0486692--pegas.netlify.app/",
+                   "https://64b7bd78d57021782c12fae6--pegas.netlify.app")
                    .AllowAnyMethod()
                    .AllowAnyHeader()
                    .AllowCredentials();
         });
 });
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
